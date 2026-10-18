@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#071326">
+<title>IA BOY — Intelligence artificielle</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #071326;
+  --panel: #101e38;
+  --panel2: #152744;
+  --blue: #38a8ff;
+  --text: #f1f7ff;
+  --muted: #9bacc7;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Arial, sans-serif;
+}
+
+button, input {
+  font-family: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+header {
+  height: 65px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 12px 18px;
+  background: #0c1b34;
+  border-bottom: 1px solid #203758;
+}
+
+.menu-btn {
+  background: transparent;
+  border: 0;
+  color: white;
+  font-size: 26px;
+}
+
+.brand {
+  font-size: 21px;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+.brand span {
+  color: var(--blue);
+}
+
+.status {
+  margin-left: auto;
+  color: #4de5ae;
+  font-size: 12px;
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -285px;
+  width: 270px;
+  height: 100%;
+  background: #101e38;
+  z-index: 20;
+  padding: 20px;
+  transition: left .3s;
+  box-shadow: 5px 0 25px #0005;
+  overflow-y: auto;
+}
+
+.sidebar.open {
+  left: 0;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: #0009;
+  z-index: 19;
+  display: none;
+}
+
+.overlay.show {
+  display: block;
+}
+
+.side-title {
+  color: var(--blue);
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 25px;
+}
+
+.side-item {
+  display: block;
+  width: 100%;
+  padding: 15px;
+  margin: 8px 0;
+  border: 1px solid #294061;
+  border-radius: 12px;
+  background: #152744;
+  color: white;
+  text-align: left;
+  font-size: 15px;
+}
+
+.side-item:hover {
+  background: #23466d;
+}
+
+main {
+  max-width: 850px;
+  margin: auto;
+  padding: 20px;
+  padding-bottom: 115px;
+}
+
+.hero {
+  text-align: center;
+  padding: 25px 10px;
+}
+
+.logo {
+  width: 115px;
+  height: 115px;
+  margin: auto;
+  border-radius: 30px;
+  background: linear-gradient(145deg,#174c94,#071b43);
+  box-shadow: 0 0 35px #087bff55;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo svg {
+  width: 95px;
+  height: 95px;
+}
+
+h1 {
+  margin-bottom: 8px;
+  font-size: 32px;
+}
+
+h1 span {
+  color: var(--blue);
+}
+
+.subtitle {
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.creator {
+  color: #7bbcff;
+  font-size: 12px;
+  margin-top: 12px;
+}
+
+.categories {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 12px;
+  margin-top: 25px;
+}
+
+.category {
+  padding: 19px 10px;
+  border-radius: 15px;
+  background: linear-gradient(145deg,#152b4b,#10203a);
+  border: 1px solid #25456b;
+  color: white;
+  font-size: 15px;
+  text-align: center;
+}
+
+.category strong {
+  display: block;
+  font-size: 27px;
+  margin-bottom: 9px;
+}
+
+.chat {
+  margin-top: 25px;
+}
+
+.message {
+  padding: 15px 17px;
+  border-radius: 17px;
+  margin: 14px 0;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.user {
+  background: #1763b7;
+  margin-left: 15%;
+  border-bottom-right-radius: 4px;
+}
+
+.bot {
+  background: #132642;
+  border: 1px solid #25476b;
+  margin-right: 8%;
+  border-bottom-left-radius: 4px;
+}
+
+.bot-name {
+  color: #49b5ff;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.input-area {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #09172d;
+  padding: 13px;
+  border-top: 1px solid #25436a;
+}
+
+.input-box {
+  max-width: 850px;
+  margin: auto;
+  display: flex;
+  gap: 10px;
+}
+
+input {
+  flex: 1;
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid #35567b;
+  border-radius: 13px;
+  background: #142744;
+  color: white;
+  outline: none;
+  font-size: 15px;
+}
+
+input:focus {
+  border-color: var(--blue);
+}
+
+.send {
+  background: linear-gradient(135deg,#1685ed,#36b5ff);
+  border: none;
+  border-radius: 13px;
+  color: white;
+  padding: 0 20px;
+  font-size: 22px;
+}
+
+.small {
+  font-size: 12px;
+  color: #9bacc7;
+  text-align: center;
+  margin-top: 9px;
+}
+
+@media(min-width:650px) {
+  .categories {
+    grid-template-columns: repeat(4,1fr);
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div id="overlay" class="overlay" onclick="toggleMenu()"></div>
+
+<aside id="sidebar" class="sidebar">
+  <div class="side-title">🤖 IA BOY</div>
+
+  <button class="side-item" onclick="newChat()">➕ Nouvelle discussion</button>
+  <button class="side-item" onclick="selectCategory('Mathématiques')">🧮 Mathématiques</button>
+  <button class="side-item" onclick="selectCategory('Sciences')">🔬 Sciences</button>
+  <button class="side-item" onclick="selectCategory('Histoire')">📜 Histoire</button>
+  <button class="side-item" onclick="selectCategory('Géographie')">🌍 Géographie</button>
+  <button class="side-item" onclick="selectCategory('Technologie')">💻 Technologie</button>
+  <button class="side-item" onclick="selectCategory('Programmation')">⌨️ Programmation</button>
+  <button class="side-item" onclick="about()">👑 À propos</button>
+  <button class="side-item" onclick="toggleMenu()">✕ Fermer</button>
+</aside>
+
+<header>
+  <button class="menu-btn" onclick="toggleMenu()">☰</button>
+  <div class="brand">IA <span>BOY</span></div>
+  <div class="status">● ACTIF</div>
+</header>
+
+<main>
+
+<section id="welcome" class="hero">
+
+  <div class="logo">
+    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="robotGradient" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#65d5ff"/>
+          <stop offset="100%" stop-color="#0876f7"/>
+        </linearGradient>
+      </defs>
+
+      <path d="M50 8 V20" stroke="#49c5ff" stroke-width="5" stroke-linecap="round"/>
+      <circle cx="50" cy="8" r="5" fill="#59d9ff"/>
+
+      <rect x="17" y="22" width="66" height="57" rx="19"
+            fill="url(#robotGradient)"/>
+
+      <rect x="24" y="31" width="52" height="35" rx="12"
+            fill="#061b39"/>
+
+      <rect x="32" y="42" width="13" height="12" rx="5"
+            fill="#5ae5ff"/>
+
+      <rect x="55" y="42" width="13" height="12" rx="5"
+            fill="#5ae5ff"/>
+
+      <path d="M42 60 Q50 66 58 60"
+            fill="none" stroke="#49d9ff"
+            stroke-width="3" stroke-linecap="round"/>
+
+      <rect x="8" y="43" width="10" height="20" rx="5"
+            fill="#168dff"/>
+
+      <rect x="82" y="43" width="10" height="20" rx="5"
+            fill="#168dff"/>
+
+      <rect x="36" y="80" width="28" height="8" rx="4"
+            fill="#168dff"/>
+    </svg>
+  </div>
+
+  <h1>Bonjour, je suis <span>IA BOY</span></h1>
+
+  <p class="subtitle">
+    Ton assistant intelligent de recherche.<br>
+    Explore les sciences, les mathématiques,
+    l'histoire et bien plus encore.
+  </p>
+
+  <p class="creator">
+    Créé par Owen Vianney Jean Jacques
+  </p>
+
+  <div class="categories">
+    <button class="category" onclick="selectCategory('Mathématiques')">
+      <strong>🧮</strong>Mathématiques
+    </button>
+
+    <button class="category" onclick="selectCategory('Sciences')">
+      <strong>🔬</strong>Sciences
+    </button>
+
+    <button class="category" onclick="selectCategory('Histoire')">
+      <strong>📜</strong>Histoire
+    </button>
+
+    <button class="category" onclick="selectCategory('Technologie')">
+      <strong>💻</strong>Technologie
+    </button>
+  </div>
+
+</section>
+
+<section id="chat" class="chat"></section>
+
+</main>
+
+<div class="input-area">
+  <div class="input-box">
+    <input
+      id="question"
+      placeholder="Pose une question à IA BOY..."
+      autocomplete="off"
+    >
+    <button class="send" onclick="sendMessage()">➤</button>
+  </div>
+  <div class="small">IA BOY • Assistant de recherche</div>
+</div>
+
+<script>
+"use strict";
+
+const chat = document.getElementById("chat");
+const input = document.getElementById("question");
+const welcome = document.getElementById("welcome");
+
+let messages = [];
+
+function toggleMenu() {
+  document.getElementById("sidebar").classList.toggle("open");
+  document.getElementById("overlay").classList.toggle("show");
+}
+
+function closeMenu() {
+  document.getElementById("sidebar").classList.remove("open");
+  document.getElementById("overlay").classList.remove("show");
+}
+
+function normalize(text) {
+  return text
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[?!.,;:]/g, "")
+    .trim();
+}
+
+function addMessage(text, sender) {
+  welcome.style.display = "none";
+
+  const box = document.createElement("div");
+  box.className = "message " + sender;
+
+  if (sender === "bot") {
+    const title = document.createElement("div");
+    title.className = "bot-name";
+    title.textContent = "🤖 IA BOY";
+    box.appendChild(title);
+  }
+
+  const content = document.createElement("div");
+  content.textContent = text;
+  box.appendChild(content);
+
+  chat.appendChild(box);
+  messages.push({ sender, text });
+
+  window.scrollTo({
+    top: document.body.scrollHeight,
+    behavior: "smooth"
+  });
+
+  return content;
+}
+
+function newChat() {
+  messages = [];
+  chat.innerHTML = "";
+  welcome.style.display = "block";
+  input.value = "";
+  closeMenu();
+}
+
+function about() {
+  closeMenu();
+  addMessage(
+    "Je suis IA BOY, une application de recherche créée par Owen Vianney Jean Jacques.\n\n" +
+    "Je peux aider à explorer les mathématiques, les sciences, " +
+    "l'histoire, la géographie et la technologie.",
+    "bot"
+  );
+}
+
+function selectCategory(category) {
+  closeMenu();
+
+  addMessage(
+    "Je veux explorer : " + category,
+    "user"
+  );
+
+  addMessage(
+    "Très bien ! Nous allons explorer " + category +
+    ". Pose-moi une question précise et je chercherai une explication.",
+    "bot"
+  );
+
+  input.focus();
+}
+
+function localResponse(question) {
+  const q = normalize(question);
+
+  if (/^(bonjour|bonsoir|salut|hello|coucou|bjr|slt|hey|hi)$/.test(q)) {
+    return "Bonjour ! 👋 Je suis IA BOY. Comment puis-je t'aider aujourd'hui ?";
+  }
+
+  if (/^(ca va|comment vas tu|tu vas bien|comment ca va)$/.test(q)) {
+    return "Je fonctionne bien, merci ! 😊 Et toi, comment vas-tu ?";
+  }
+
+  if (/^(oui|ouais|yeah|yes|super|genial|cool|parfait)$/.test(q)) {
+    return "Yeah ! 😄 Super ! Que veux-tu découvrir maintenant ?";
+  }
+
+  if (/^(non|no|nope)$/.test(q)) {
+    return "D'accord ! Dis-moi ce que tu préfères.";
+  }
+
+  if (/^(merci|merci beaucoup|thanks)$/.test(q)) {
+    return "Avec plaisir ! 💙 Je suis là pour t'aider.";
+  }
+
+  if (/^(au revoir|a bientot|a demain|bye|bonne nuit)$/.test(q)) {
+    return "À bientôt ! 👋 Reviens quand tu veux pour découvrir de nouvelles choses.";
+  }
+
+  if (
+    q.includes("tu es qui") ||
+    q.includes("qui es tu") ||
+    q.includes("comment tu t'appelles") ||
+    q.includes("ton nom")
+  ) {
+    return "Je suis IA BOY, une application intelligente de recherche créée par Owen Vianney Jean Jacques. 🤖";
+  }
+
+  if (
+    q.includes("qui t'a cree") ||
+    q.includes("ton createur") ||
+    q.includes("qui est ton createur")
+  ) {
+    return "Mon créateur est Owen Vianney Jean Jacques.";
+  }
+
+  if (
+    q.includes("que peux tu faire") ||
+    q.includes("tes capacites") ||
+    q.includes("tu sais faire quoi")
+  ) {
+    return (
+      "Voici mes capacités :\n\n" +
+      "🧮 Mathématiques : calculs et explications.\n" +
+      "🔬 Sciences : biologie, physique et chimie.\n" +
+      "📜 Histoire : événements et personnages.\n" +
+      "🌍 Géographie : pays et régions.\n" +
+      "💻 Technologie : ordinateurs et inventions.\n" +
+      "💬 Discussion : conversations simples.\n\n" +
+      "Je peux aussi rechercher des informations en ligne."
+    );
+  }
+
+  if (q.includes("es tu chatgpt")) {
+    return (
+      "Je suis IA BOY, une application créée par " +
+      "Owen Vianney Jean Jacques. Je suis un assistant de recherche, " +
+      "et non l'application ChatGPT."
+    );
+  }
+
+  if (q.includes("raconte une blague")) {
+    return "Pourquoi les ordinateurs ont-ils froid ? Parce qu'ils ont laissé Windows ouvert ! 😄";
+  }
+
+  return null;
+}
+
+function calculate(question) {
+  let expression = question
+    .toLowerCase()
+    .replace(/combien font|calcule|calculer|quel est le resultat de/g, "")
+    .replace(/fois|multiplié par|multiplie par/g, "*")
+    .replace(/divisé par|divise par/g, "/")
+    .replace(/plus/g, "+")
+    .replace(/moins/g, "-")
+    .replace(/×/g, "*")
+    .replace(/÷/g, "/")
+    .replace(/,/g, ".")
+    .replace(/[=?]/g, "")
+    .trim();
+
+  if (!/^[0-9+\-*/().\s]+$/.test(expression)) {
+    return null;
+  }
+
+  if (!/[+\-*/]/.test(expression)) {
+    return null;
+  }
+
+  if (expression.length > 100) {
+    return null;
+  }
+
+  try {
+    const result = Function(
+      '"use strict"; return (' + expression + ')'
+    )();
+
+    if (typeof result !== "number" || !Number.isFinite(result)) {
+      return "Ce calcul ne donne pas un résultat numérique valide.";
+    }
+
+    return (
+      "🧮 Résultat : " + result +
+      "\n\nExplication :\n" +
+      "J'ai effectué l'opération " + expression +
+      " en respectant les priorités mathématiques : " +
+      "parenthèses, multiplications et divisions, " +
+      "puis additions et soustractions."
+    );
+
+  } catch (error) {
+    return null;
+  }
+}
+
+function cleanText(text) {
+  return String(text || "")
+    .replace(/<[^>]*>/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+async function searchKnowledge(question) {
+  const query = question
+    .replace(/^(qui est|qu'est ce que|c'est quoi|explique moi|parle moi de|recherche|cherche)\s+/i, "")
+    .replace(/[?]/g, "")
+    .trim();
+
+  const searchUrl =
+    "https://fr.wikipedia.org/w/api.php?" +
+    new URLSearchParams({
+      action: "query",
+      generator: "search",
+      gsrsearch: query,
+      gsrlimit: "3",
+      prop: "extracts",
+      exintro: "1",
+      explaintext: "1",
+      exsentences: "8",
+      format: "json",
+      origin: "*"
+    }).toString();
+
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 12000);
+
+  try {
+    const response = await fetch(searchUrl, {
+      signal: controller.signal
+    });
+
+    if (!response.ok) {
+      throw new Error("Recherche indisponible");
+    }
+
+    const data = await response.json();
+
+    const pages = Object.values(data.query?.pages || {});
+
+    if (!pages.length) {
+      return (
+        "Je n'ai pas trouvé d'information suffisamment précise " +
+        "sur ce sujet.\n\nEssaie de reformuler ta question " +
+        "avec le nom exact du sujet."
+      );
+    }
+
+    const best = pages.find(page => page.extract) || pages[0];
+
+    const explanation = cleanText(best.extract);
+
+    if (!explanation) {
+      return "J'ai trouvé le sujet, mais pas encore d'explication exploitable.";
+    }
+
+    return (
+      "🔎 " + best.title + "\n\n" +
+      explanation +
+      "\n\n💡 Tu peux me poser une autre question sur ce sujet."
+    );
+
+  } catch (error) {
+    return (
+      "Je ne peux pas effectuer cette recherche pour le moment.\n\n" +
+      "Vérifie ta connexion Internet. Certaines recherches peuvent " +
+      "également être bloquées par le navigateur."
+    );
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+let busy = false;
+
+async function sendMessage() {
+  if (busy) return;
+
+  const question = input.value.trim();
+
+  if (!question) return;
+
+  input.value = "";
+  addMessage(question, "user");
+
+  const local = localResponse(question);
+
+  if (local !== null) {
+    addMessage(local, "bot");
+    return;
+  }
+
+  const math = calculate(question);
+
+  if (math !== null) {
+    addMessage(math, "bot");
+    return;
+  }
+
+  busy = true;
+
+  const content = addMessage(
+    "🔎 Je recherche une explication...",
+    "bot"
+  );
+
+  try {
+    const answer = await searchKnowledge(question);
+    content.textContent = answer;
+  } catch (error) {
+    content.textContent =
+      "Une erreur s'est produite. Réessaie dans quelques instants.";
+  } finally {
+    busy = false;
+  }
+}
+
+input.addEventListener("keydown", function(event) {
+  if (event.key === "Enter") {
+    sendMessage();
+  }
+});
+
+</script>
+
+</body>
+</html>
